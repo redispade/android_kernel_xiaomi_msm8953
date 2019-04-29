@@ -1500,7 +1500,7 @@ out:
 
 /* If pkt_sk(sk)->fanout->sk_ref is zero, this function removes
  * pkt_sk(sk)->fanout from fanout_list and returns pkt_sk(sk)->fanout.
- * It is the responsibility of the caller to free the returned packet_fanout 
+ * It is the responsibility of the caller to free the returned packet_fanout
  * (after synchronize_net())
  * This Branch still does not have support classic BPF fanout mode.
  *  upstream commit 47dceb8ecdc: packet: add classic BPF fanout mode
