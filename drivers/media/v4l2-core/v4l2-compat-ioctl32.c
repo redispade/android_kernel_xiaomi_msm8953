@@ -135,24 +135,14 @@ static inline int put_v4l2_vbi_format(struct v4l2_vbi_format *kp, struct v4l2_vb
 
 static inline int get_v4l2_sliced_vbi_format(struct v4l2_sliced_vbi_format *kp, struct v4l2_sliced_vbi_format __user *up)
 {
-	struct v4l2_clip __user *kclips;
-	struct v4l2_clip32 __user *uclips;
-	compat_caddr_t p;
-	u32 clipcount;
-
-	if (copy_in_user(&up->w, &kp->w, sizeof(kp->w)) ||
-	    assign_in_user(&up->field, &kp->field) ||
-	    assign_in_user(&up->chromakey, &kp->chromakey) ||
-	    assign_in_user(&up->global_alpha, &kp->global_alpha) ||
-	    get_user(clipcount, &kp->clipcount) ||
-	    put_user(clipcount, &up->clipcount))
+	if (copy_from_user(kp, up, sizeof(struct v4l2_sliced_vbi_format)))
 		return -EFAULT;
 	return 0;
 }
 
-	if (get_user(kclips, &kp->clips))
-		return -EFAULT;
-	if (get_user(p, &up->clips))
+static inline int put_v4l2_sliced_vbi_format(struct v4l2_sliced_vbi_format *kp, struct v4l2_sliced_vbi_format __user *up)
+{
+	if (copy_to_user(up, kp, sizeof(struct v4l2_sliced_vbi_format)))
 		return -EFAULT;
 	return 0;
 }
