@@ -1073,7 +1073,7 @@ static int mixer_ctl_feature_info(struct snd_kcontrol *kcontrol,
 		if (!cval->initialized) {
 			get_min_max_with_quirks(cval, 0, kcontrol);
 			if (cval->initialized && cval->dBmin >= cval->dBmax) {
-				kcontrol->vd[0].access &= 
+				kcontrol->vd[0].access &=
 					~(SNDRV_CTL_ELEM_ACCESS_TLV_READ |
 					  SNDRV_CTL_ELEM_ACCESS_TLV_CALLBACK);
 				snd_ctl_notify(cval->mixer->chip->card,
@@ -2170,7 +2170,7 @@ static int parse_audio_unit(struct mixer_build *state, int unitid)
 static void snd_usb_mixer_free(struct usb_mixer_interface *mixer)
 {
 	/* kill pending URBs */
-	snd_usb_mixer_disconnect(mixer);
+	snd_usb_mixer_disconnect(&mixer->list);
 
 	kfree(mixer->id_elems);
 	if (mixer->urb) {
@@ -2505,6 +2505,9 @@ _error:
 
 void snd_usb_mixer_disconnect(struct usb_mixer_interface *mixer)
 {
+	struct usb_mixer_interface *mixer;
+
+	mixer = list_entry(p, struct usb_mixer_interface, list);
 	if (mixer->disconnected)
 		return;
 	if (mixer->urb)
